@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
 import { Header } from "y/components/Header";
+import { api } from "y/utils/api";
 
 const Home: NextPage = () => {
   return (
@@ -15,9 +16,66 @@ const Home: NextPage = () => {
       </Head>
       <main>
         <Header />
+        <Content />
       </main>
     </>
   );
 };
 
 export default Home;
+
+const Content: React.FC = () => {
+  const { data: sessionData } = useSession();
+
+  //fetch data
+  const { data: topics, refetch: refetchTopics } = api.topic.getAll.useQuery(
+    undefined, //no input
+    {
+      enabled: sessionData?.user !== undefined,
+    }
+  );
+  //create Topic
+  const createTopic = api.topic.create.useMutation({
+    onSuccess: () => {
+      void refetchTopics();
+    },
+  });
+  // return <div>{JSON.stringify(topics)}</div>;
+  return (
+    <div className={"mx-5 mt-5 grid grid-cols-4 gap-2"}>
+      <div className={"px-2"}>
+        <ul className={"menu rounded-box w-56 bg-base-100 p-2"}>
+          {topics?.map((topic) => (
+            <li key={topic.id}>
+              <a
+                href={"#"}
+                onClick={(evt) => {
+                  evt.preventDefault();
+                }}
+              >
+                {topic.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div className={"divider"}></div>
+        <input
+          type={"text"}
+          placeholder={"New Topic"}
+          className={"input-bordered, input input-sm w-full"}
+          onKeyDown={(e) => {
+            if (e.key == "Enter") {
+              createTopic.mutate({
+                title: e.currentTarget.value,
+              });
+              e.currentTarget.value = "";
+            }
+          }}
+        />
+      </div>
+      <div className={"col-span-3"}>
+        <div>{JSON.stringify(topics)}</div>
+      </div>
+    </div>
+  );
+};
