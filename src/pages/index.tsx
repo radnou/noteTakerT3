@@ -7,6 +7,7 @@ import { Header } from "y/components/Header";
 import { api, RouterOutputs } from "y/utils/api";
 import { useSession } from "next-auth/react";
 import { NoteEditor } from "y/components/NoteEditor";
+import { NoteCard } from "y/components/NoteCard";
 
 const Home: NextPage = () => {
   return (
@@ -66,6 +67,11 @@ const Content: React.FC = () => {
       void refetchNotes(); // update the list of notes after creating a new one
     },
   });
+  const deleteNote = api.note.delete.useMutation({
+    onSuccess: () => {
+      void refetchNotes(); // update the list of notes after creating a new one
+    },
+  });
 
   // return <div>{JSON.stringify(topics)}</div>;
   return (
@@ -101,6 +107,19 @@ const Content: React.FC = () => {
         />
       </div>
       <div className={"col-span-3"}>
+        //list of notes
+        <div>
+          {notes?.map((note) => (
+            <div key={note.id} className={"mt-5"}>
+              <NoteCard
+                note={note}
+                onDelete={() => {
+                  void deleteNote.mutate({ id: note.id });
+                }}
+              />
+            </div>
+          ))}
+        </div>
         <NoteEditor
           // implement the on save function
           onSave={({ title, content }) => {
