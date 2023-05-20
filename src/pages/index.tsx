@@ -107,7 +107,6 @@ const Content: React.FC = () => {
         />
       </div>
       <div className={"col-span-3"}>
-        //list of notes
         <div>
           {notes?.map((note) => (
             <div key={note.id} className={"mt-5"}>

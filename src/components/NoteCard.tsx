@@ -1,4 +1,4 @@
-import { RouterOutputs } from "y/utils/api";
+import { type RouterOutputs } from "y/utils/api";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 
