@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { Header } from "y/components/Header";
 import { api, RouterOutputs } from "y/utils/api";
 import { useSession } from "next-auth/react";
+import { NoteEditor } from "y/components/NoteEditor";
 
 const Home: NextPage = () => {
   return (
@@ -45,9 +46,27 @@ const Content: React.FC = () => {
   //create Topic
   const createTopic = api.topic.create.useMutation({
     onSuccess: () => {
-      void refetchTopics();
+      void refetchTopics(); // update the list of topics after creating a new one
     },
   });
+
+  //list of notes
+  const { data: notes, refetch: refetchNotes } = api.note.getAll.useQuery(
+    {
+      topicId: selectedTopic?.id ?? "",
+    },
+    {
+      enabled: sessionData?.user !== undefined && selectedTopic !== null,
+    }
+  );
+
+  //create note
+  const createNote = api.note.create.useMutation({
+    onSuccess: () => {
+      void refetchNotes(); // update the list of notes after creating a new one
+    },
+  });
+
   // return <div>{JSON.stringify(topics)}</div>;
   return (
     <div className={"mx-5 mt-5 grid grid-cols-4 gap-2"}>
@@ -82,7 +101,16 @@ const Content: React.FC = () => {
         />
       </div>
       <div className={"col-span-3"}>
-        <div>{JSON.stringify(topics)}</div>
+        <NoteEditor
+          // implement the on save function
+          onSave={({ title, content }) => {
+            void createNote.mutate({
+              title,
+              content,
+              topicId: selectedTopic?.id ?? "",
+            });
+          }}
+        />
       </div>
     </div>
   );
