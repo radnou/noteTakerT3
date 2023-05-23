@@ -95,7 +95,7 @@ const Content: React.FC = () => {
         <input
           type={"text"}
           placeholder={"New Topic"}
-          className={"input-bordered, input input-sm w-full"}
+          className={"input-bordered, input-primary input input-sm   w-full "}
           onKeyDown={(e) => {
             if (e.key == "Enter") {
               createTopic.mutate({
