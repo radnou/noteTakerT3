@@ -24,9 +24,9 @@ export const NoteEditor = ({
         </h2>
         <CodeMirror
           value={code}
-          width="500px"
+          width="50%"
           height="31vh"
-          minWidth="500px"
+          minWidth="25%"
           minHeight="30vh"
           extensions={[
             markdown({ base: markdownLanguage, codeLanguages: languages }),
