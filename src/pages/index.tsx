@@ -183,7 +183,7 @@ const Content: React.FC = () => {
               id: noteEdit.id,
               title: noteEdit.title,
               content: noteEdit.content,
-              topic: noteEdit.topicId || "",
+              topic: noteEdit.topicId || " ",
             }}
           />
         )}
