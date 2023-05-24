@@ -2,7 +2,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { Header } from "y/components/Header";
 import { api, RouterOutputs } from "y/utils/api";
 import { useSession } from "next-auth/react";
@@ -29,6 +29,11 @@ export default Home;
 
 //type of the data we get from the api
 type Topic = RouterOutputs["topic"]["getAll"][0];
+type Note = RouterOutputs["note"]["getAll"][0];
+
+function Loading() {
+  return <h2>🌀 Loading...</h2>;
+}
 
 const Content: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -44,6 +49,9 @@ const Content: React.FC = () => {
       },
     }
   );
+  const [noteEdit, setNoteEdit] = useState<Note>({} as Note);
+  const [idNoteEdit, setIdNoteEdit] = useState<string>("");
+  const [handleEditMode, sethandleEditMode] = useState<boolean>(false);
   //create Topic
   const createTopic = api.topic.create.useMutation({
     onSuccess: () => {
@@ -67,12 +75,18 @@ const Content: React.FC = () => {
       void refetchNotes(); // update the list of notes after creating a new one
     },
   });
+  //delete note
   const deleteNote = api.note.delete.useMutation({
     onSuccess: () => {
       void refetchNotes(); // update the list of notes after creating a new one
     },
   });
-
+  //update note
+  const updateNote = api.note.update.useMutation({
+    onSuccess: () => {
+      void refetchNotes();
+    },
+  });
   // return <div>{JSON.stringify(topics)}</div>;
   return (
     <div className={"mx-5 mt-5 grid grid-cols-4 gap-2"}>
@@ -107,28 +121,72 @@ const Content: React.FC = () => {
         />
       </div>
       <div className={"col-span-3"}>
-        <div>
-          {notes?.map((note) => (
-            <div key={note.id} className={"mt-5"}>
-              <NoteCard
-                note={note}
-                onDelete={() => {
-                  void deleteNote.mutate({ id: note.id });
-                }}
-              />
-            </div>
-          ))}
-        </div>
-        <NoteEditor
-          // implement the on save function
-          onSave={({ title, content }) => {
-            void createNote.mutate({
-              title,
-              content,
-              topicId: selectedTopic?.id ?? "",
-            });
-          }}
-        />
+        <Suspense fallback={<Loading />}>
+          <div>
+            {notes?.map((note) => (
+              <div key={note.id} className={"mt-5"}>
+                <NoteCard
+                  note={note}
+                  onDelete={() => {
+                    void deleteNote.mutate({ id: note.id });
+                  }}
+                  onEdit={() => {
+                    setNoteEdit(note);
+                    sethandleEditMode(true);
+                    setIdNoteEdit(note.id);
+                    console.log("setnoteEdit", noteEdit);
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </Suspense>
+        <div className={"divider"}></div>
+        {!handleEditMode ? (
+          <NoteEditor
+            // implement the on save function
+            editMode={handleEditMode}
+            action={({ id, title, content, topic }) => {
+              createNote.mutate({
+                title,
+                content,
+                topicId: selectedTopic.id || "",
+              });
+              sethandleEditMode(false);
+              setNoteEdit({} as Note);
+            }}
+            note={{
+              id: noteEdit.id,
+              title: noteEdit.title,
+              content: noteEdit.content,
+              topic: noteEdit.topicId,
+            }}
+          />
+        ) : (
+          <NoteEditor
+            // implement the on save function
+            editMode={handleEditMode}
+            action={({ id, title, content, topic }) => {
+              updateNote.mutate(
+                {
+                  id,
+                  title,
+                  content,
+                  topicId: selectedTopic.id || "",
+                },
+                {}
+              );
+              sethandleEditMode(false);
+              setNoteEdit({} as Note);
+            }}
+            note={{
+              id: noteEdit.id,
+              title: noteEdit.title,
+              content: noteEdit.content,
+              topic: noteEdit.topicId || "",
+            }}
+          />
+        )}
       </div>
     </div>
   );
