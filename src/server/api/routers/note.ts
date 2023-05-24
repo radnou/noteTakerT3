@@ -17,6 +17,7 @@ export const noteRouter = createTRPCRouter({
         id: z.string(),
         title: z.string(),
         content: z.string(),
+        topic: z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -27,7 +28,7 @@ export const noteRouter = createTRPCRouter({
         data: {
           title: input.title,
           content: input.content,
-          topicId: input.topicId,
+          topicId: input.topic,
           updatedAt: new Date(),
         },
       });

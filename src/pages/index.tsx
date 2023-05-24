@@ -150,7 +150,7 @@ const Content: React.FC = () => {
               createNote.mutate({
                 title,
                 content,
-                topicId: selectedTopic.id || "",
+                topicId: topic || "",
               });
               sethandleEditMode(false);
               setNoteEdit({} as Note);
@@ -169,10 +169,10 @@ const Content: React.FC = () => {
             action={({ id, title, content, topic }) => {
               updateNote.mutate(
                 {
-                  id,
+                  id: id || idNoteEdit,
                   title,
                   content,
-                  topicId: selectedTopic.id || "",
+                  topic: topic || "",
                 },
                 {}
               );

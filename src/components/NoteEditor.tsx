@@ -2,8 +2,6 @@ import CodeMirror from "@uiw/react-codemirror";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
 import { useEffect, useState } from "react";
-import { noteRouter } from "y/server/api/routers/note";
-import { boolean } from "zod";
 
 export const NoteEditor = ({
   editMode,
