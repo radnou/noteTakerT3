@@ -1,7 +1,3 @@
-Voici le README que vous pouvez utiliser pour ce dépôt GitHub :
-
----
-
 # noteTakerT3
 Accessible ici : https://note-taker-t3-three.vercel.app
 
