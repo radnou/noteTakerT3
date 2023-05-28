@@ -18,8 +18,12 @@ export const NoteCard = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   return (
-    <div className={"card mt-5 border-gray-200 bg-base-100 shadow-xl"}>
-      <div className={"card-body m-0 pt-3"}>
+    <div
+      className={
+        "card mt-5 flex flex-col border-gray-200 bg-base-100 shadow-xl"
+      }
+    >
+      <div className={"card-body m-0 flex flex-col pt-3"}>
         <div
           className={`collapse-arrow ${
             isExpanded ? "collapse-open" : ""

@@ -37,10 +37,12 @@ export const NoteEditor = ({
   }, [note]);
 
   return (
-    <div className="card mt-5 border border-gray-200 bg-base-100 shadow-xl">
-      <div className="card-body">
-        <div className="card-title">
-          <h2>{editMode ? "Edit Note" : "Create New Note"}</h2>
+    <div className="card mt-5  w-full  border border-gray-200 bg-base-100 shadow-xl">
+      <div className="card-body flex flex-col">
+        <div className="card-title flex flex-col ">
+          <h2 className={"text-xl font-bold "}>
+            {editMode ? "Edit Note" : "Create New Note"}
+          </h2>
           <input
             type="text"
             placeholder="Note Title"
