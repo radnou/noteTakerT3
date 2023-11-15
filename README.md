@@ -3,7 +3,7 @@ Accessible ici : https://note-taker-t3-three.vercel.app
 
 ## A propos
 
-`noteTakerT3` est un projet basé sur le stack T3, démarré avec `create-t3-app`. L'objectif de ce projet est de fournir une base solide pour commencer à développer des applications à l'aide de la pile technologique T3. Il est conçu pour être simple à utiliser et à comprendre, permettant aux utilisateurs d'ajouter des fonctionnalités supplémentaires selon leurs besoins.
+`noteTakerT3` est un projet basé sur la stack T3, démarré avec `create-t3-app`. L'objectif de ce projet est de fournir une base solide pour commencer à développer des applications à l'aide de la pile technologique T3. Il est conçu pour être simple à utiliser et à comprendre, permettant aux utilisateurs d'ajouter des fonctionnalités supplémentaires selon leurs besoins.
 
 ## Technologies utilisées
 
